@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quest - Nivel A2 al B2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-panel: #151b3d;
+            --accent-cyan: #00f3ff;
+            --accent-purple: #bd00ff;
+            --accent-gold: #ffd700;
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a8c9;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* App Container */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--bg-panel);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-box:hover::before {
+            left: 100%;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* XP Bar */
+        .xp-container {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .xp-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-gold), #ff8c00);
+            color: var(--bg-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .menu-btn {
+            background: var(--bg-panel);
+            border: 2px solid rgba(0, 243, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+        }
+
+        .menu-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .menu-btn:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+        }
+
+        .menu-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .menu-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            margin-bottom: 5px;
+        }
+
+        .menu-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .menu-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-btn.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .streak-counter {
+            background: linear-gradient(135deg, var(--accent-red), #ff6b6b);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: var(--bg-panel);
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+        }
+
+        .question-number {
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .question-text .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /* Options */
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 18px 20px;
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.2);
+            animation: correctPulse 0.5s;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--accent-red);
+            background: rgba(255, 71, 87, 0.2);
+            animation: shake 0.5s;
+        }
+
+        .option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--accent-green);
+        }
+
+        .feedback.wrong {
+            background: rgba(255, 71, 87, 0.1);
+            border: 2px solid var(--accent-red);
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .feedback-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feedback-xp {
+            color: var(--accent-gold);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            color: var(--bg-dark);
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.3s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .trophy {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .results-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .results-score {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            font-family: 'Orbitron', sans-serif;
+            margin: 20px 0;
+        }
+
+        .results-message {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .rewards-box {
+            background: var(--bg-panel);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--accent-gold);
+        }
+
+        .rewards-title {
+            color: var(--accent-gold);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 15px;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        /* Achievements */
+        .achievements {
+            margin-top: 20px;
+        }
+
+        .achievement {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .achievement.unlocked {
+            border-color: var(--accent-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .achievement.unlocked .achievement-icon {
+            opacity: 1;
+        }
+
+        .achievement-info h4 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .achievement.unlocked h4 {
+            color: var(--accent-gold);
+        }
+
+        .achievement-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Daily Challenge */
+        .daily-challenge {
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.2), rgba(0, 243, 255, 0.2));
+            border: 2px solid var(--accent-purple);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-challenge::before {
+            content: '🔥';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 4rem;
+            opacity: 0.2;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .challenge-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-purple);
+            font-size: 1rem;
+        }
+
+        .challenge-timer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+        }
+
+        .challenge-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .challenge-btn {
+            width: 100%;
+            background: var(--accent-purple);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .challenge-btn:hover {
+            background: #d000ff;
+            transform: scale(1.02);
+        }
+
+        /* Progress Ring */
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
+        }
+
+        .progress-ring-progress {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .menu-grid {
+                gap: 10px;
+            }
+            
+            .menu-btn {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Stars -->
+    <div class="stars" id="stars"></div>
+
+    <div class="app-container">
+        <!-- SVG Gradient Definition -->
+        <svg width="0" height="0">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#00f3ff"/>
+                    <stop offset="100%" style="stop-color:#bd00ff"/>
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <!-- MAIN MENU -->
+        <div id="mainMenu" class="screen active">
+            <div class="header">
+                <div class="logo">⚔️ ENGLISH QUEST</div>
+                <div class="subtitle">Domina el inglés nivel por nivel</div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value" id="totalXP">0</div>
+                    <div class="stat-label">XP Total</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value" id="streak">1</div>
+                    <div class="stat-label">Racha</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="lessonsCompleted">0</div>
+                    <div class="stat-label">Lecciones</div>
+                </div>
+            </div>
+
+            <!-- XP Bar -->
+            <div class="xp-container">
+                <div class="xp-header">
+                    <span>Nivel <span id="currentLevel">A2</span></span>
+                    <span><span id="currentXP">0</span> / <span id="maxXP">100</span> XP</span>
+                </div>
+                <div class="xp-bar">
+                    <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Daily Challenge -->
+            <div class="daily-challenge" id="dailyChallenge">
+                <div class="challenge-header">
+                    <span class="challenge-title">🔥 DESAFÍO DIARIO</span>
+                    <span class="challenge-timer" id="challengeTimer">23:59:59</span>
+                </div>
+                <div class="challenge-desc">Completa 5 lecciones sin errores</div>
+                <button class="challenge-btn" onclick="startDailyChallenge()">¡ACEPTAR DESAFÍO!</button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="menu-grid">
+                <div class="menu-btn" onclick="startGame('grammar')">
+                    <span class="menu-icon">⚔️</span>
+                    <div class="menu-title">GRAMÁTICA</div>
+                    <div class="menu-desc">Domina los tiempos verbales</div>
+                </div>
+                <div class="menu-btn" onclick="startGame('vocabulary')">
+                    <span class="menu-icon">📚</span>
+                    <div class="menu-title">VOCABULARIO</div>
+                    <div class="menu-desc">Palabras clave A2-B1</div>
+                </div>
+                <div class="menu-btn locked" id="speakingBtn">
+                    <span class="menu-icon">🎙️</span>
+                    <div class="menu-title">SPEAKING</div>
+                    <div class="menu-desc">Desbloquea en nivel B1</div>
+                </div>
+                <div class="menu-btn locked" id="examBtn">
+                    <span class="menu-icon">🏆</span>
+                    <div class="menu-title">EXAMEN FINAL</div>
+                    <div class="menu-desc">Certifica tu nivel</div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="achievements">
+                <h3 style="margin-bottom: 15px; color: var(--accent-gold);">🏅 LOGROS</h3>
+                <div class="achievement unlocked" id="ach1">
+                    <span class="achievement-icon">🌟</span>
+                    <div class="achievement-info">
+                        <h4>Primeros Pasos</h4>
+                        <p>Completa tu primera lección</p>
+                    </div>
+                </div>
+                <div class="achievement" id="ach2">
+                    <span class="achievement-icon">🔥</span>
+                    <div class="achievement-info">
+                        <h4>Racha de 3 días</h4>
+                        <p>Estudia 3 días seguidos</p>
+                    </div>
+                </div>
+                <div class="achievement" id="ach3">
+                    <span class="achievement-icon">🎯</span>
+                    <div class="achievement-info">
+                        <h4>Perfecto</h4>
+                        <p>10 respuestas correctas seguidas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="gameScreen" class="game-screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Volver</button>
+                <div class="streak-counter" id="gameStreak">🔥 0</div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number">PREGUNTA <span id="qNumber">1</span>/10</div>
+                <div class="question-text" id="questionText">Cargando...</div>
+            </div>
+
+            <div class="options-grid" id="optionsGrid">
+                <!-- Options generated by JS -->
+            </div>
+
+            <div class="feedback" id="feedback">
+                <div class="feedback-icon" id="feedbackIcon">✅</div>
+                <div class="feedback-text" id="feedbackText">¡Correcto!</div>
+                <div class="feedback-xp" id="feedbackXP">+10 XP</div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">SIGUIENTE →</button>
+            </div>
+        </div>
+
+        <!-- RESULTS SCREEN -->
+        <div id="resultsScreen" class="results-screen">
+            <div class="trophy" id="resultTrophy">🏆</div>
+            <h2 class="results-title" id="resultTitle">¡LECCIÓN COMPLETADA!</h2>
+            <div class="results-score" id="resultScore">8/10</div>
+            <p class="results-message" id="resultMessage">¡Buen trabajo! Sigue practicando.</p>
+            
+            <div class="rewards-box">
+                <div class="rewards-title">🎁 RECOMPENSAS</div>
+                <div class="reward-item">⭐ <span id="xpEarned">+80 XP</span></div>
+                <div class="reward-item">🔥 <span id="streakBonus">Racha: +10 XP</span></div>
+            </div>
+
+            <button class="next-btn" onclick="backToMenu()">CONTINUAR →</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const gameState = {
+            xp: parseInt(localStorage.getItem('englishQuestXP')) || 0,
+            level: localStorage.getItem('englishQuestLevel') || 'A2',
+            streak: parseInt(localStorage.getItem('englishQuestStreak')) || 1,
+            lessonsCompleted: parseInt(localStorage.getItem('englishQuestLessons')) || 0,
+            lastPlayed: localStorage.getItem('englishQuestLastPlayed') || null,
+            achievements: JSON.parse(localStorage.getItem('englishQuestAchievements')) || ['ach1'],
+            currentStreak: 0,
+            questions: [],
+            currentQuestion: 0,
+            score: 0,
+            mode: 'grammar'
+        };
+
+        // Level thresholds
+        const levels = {
+            'A2': { max: 500, next: 'B1' },
+            'B1': { max: 1000, next: 'B2' },
+            'B2': { max: 2000, next: 'C1' }
+        };
+
+        // Question Banks
+        const questionBanks = {
+            grammar: [
+                {
+                    question: "I ________ to the gym three times a week.",
+                    options: ["go", "am going", "have gone", "went"],
+                    correct: 0,
+                    explanation: "Present simple para hábitos y rutinas"
+                },
+                {
+                    question: "She ________ in London since 2019.",
+                    options: ["lives", "is living", "has lived", "lived"],
+                    correct: 2,
+                    explanation: "Present perfect con 'since' para acciones que continúan"
+                },
+                {
+                    question: "If I ________ more money, I would buy a car.",
+                    options: ["have", "had", "would have", "had had"],
+                    correct: 1,
+                    explanation: "Second conditional: If + past simple, would + infinitive"
+                },
+                {
+                    question: "By the time we arrived, the movie ________.",
+                    options: ["started", "has started", "had started", "was starting"],
+                    correct: 2,
+                    explanation: "Past perfect para acciones antes de otra acción pasada"
+                },
+                {
+                    question: "This time tomorrow, I ________ on a plane.",
+                    options: ["sit", "will sit", "will be sitting", "am going to sit"],
+                    correct: 2,
+                    explanation: "Future continuous para acciones en progreso en el futuro"
+                },
+                {
+                    question: "I ________ never ________ such a beautiful sunset.",
+                    options: ["have... seen", "am... seeing", "did... see", "was... seeing"],
+                    correct: 0,
+                    explanation: "Present perfect con 'never' para experiencias de vida"
+                },
+                {
+                    question: "They ________ dinner when the phone rang.",
+                    options: ["have", "were having", "had", "are having"],
+                    correct: 1,
+                    explanation: "Past continuous para acciones interrumpidas"
+                },
+                {
+                    question: "By 2025, I ________ my degree.",
+                    options: ["will finish", "will have finished", "am finishing", "finish"],
+                    correct: 1,
+                    explanation: "Future perfect para acciones completadas antes de un momento futuro"
+                },
+                {
+                    question: "If it ________ tomorrow, we will stay home.",
+                    options: ["rains", "will rain", "would rain", "rained"],
+                    correct: 0,
+                    explanation: "First conditional: If + present, will + infinitive"
+                },
+                {
+                    question: "I wish I ________ taller.",
+                    options: ["am", "were", "would be", "had been"],
+                    correct: 1,
+                    explanation: "Wish + past simple para deseos irreales presentes"
+                }
+            ],
+            vocabulary: [
+                {
+                    question: "The opposite of 'cheap' is ________.",
+                    options: ["expensive", "free", "good", "bad"],
+                    correct: 0,
+                    explanation: "Expensive = caro, opuesto de cheap (barato)"
+                },
+                {
+                    question: "To ________ means to make something better.",
+                    options: ["improve", "destroy", "forget", "ignore"],
+                    correct: 0,
+                    explanation: "Improve = mejorar"
+                },
+                {
+                    question: "A ________ is a person who studies at university.",
+                    options: ["teacher", "student", "professor", "principal"],
+                    correct: 1,
+                    explanation: "Student = estudiante"
+                },
+                {
+                    question: "The ________ is the part of the day between morning and afternoon.",
+                    options: ["night", "evening", "noon", "dawn"],
+                    correct: 2,
+                    explanation: "Noon = mediodía"
+                },
+                {
+                    question: "To ________ a problem means to find a solution.",
+                    options: ["create", "solve", "avoid", "ignore"],
+                    correct: 1,
+                    explanation: "Solve = resolver"
+                },
+                {
+                    question: "Something that happens every year is ________.",
+                    options: ["monthly", "daily", "annual", "weekly"],
+                    correct: 2,
+                    explanation: "Annual = anual"
+                },
+                {
+                    question: "The ________ is the line where the earth meets the sky.",
+                    options: ["horizon", "equator", "meridian", "tropic"],
+                    correct: 0,
+                    explanation: "Horizon = horizonte"
+                },
+                {
+                    question: "To ________ means to say you will definitely do something.",
+                    options: ["promise", "maybe", "try", "hope"],
+                    correct: 0,
+                    explanation: "Promise = prometer"
+                },
+                {
+                    question: "A ________ is a piece of paper that shows you paid.",
+                    options: ["bill", "receipt", "check", "ticket"],
+                    correct: 1,
+                    explanation: "Receipt = recibo/comprobante"
+                },
+                {
+                    question: "The ________ of a book is the person who wrote it.",
+                    options: ["character", "author", "reader", "publisher"],
+                    correct: 1,
+                    explanation: "Author = autor"
+                }
+            ]
+        };
+
+        // Initialize
+        window.onload = function() {
+            createStars();
+            updateStats();
+            checkDailyStreak();
+            updateChallengeTimer();
+            setInterval(updateChallengeTimer, 1000);
+        };
+
+        // Create background stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Update stats display
+        function updateStats() {
+            document.getElementById('totalXP').textContent = gameState.xp;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('lessonsCompleted').textContent = gameState.lessonsCompleted;
+            document.getElementById('currentLevel').textContent = gameState.level;
+            
+            const levelData = levels[gameState.level];
+            const levelXP = gameState.xp % levelData.max;
+            const progress = (levelXP / levelData.max) * 100;
+            
+            document.getElementById('currentXP').textContent = levelXP;
+            document.getElementById('maxXP').textContent = levelData.max;
+            document.getElementById('xpFill').style.width = progress + '%';
+            
+            // Check level up
+            if (levelXP >= levelData.max && levelData.next) {
+                levelUp(levelData.next);
+            }
+            
+            // Unlock features
+            if (gameState.level === 'B1' || gameState.level === 'B2') {
+                document.getElementById('speakingBtn').classList.remove('locked');
+            }
+            if (gameState.level === 'B2') {
+                document.getElementById('examBtn').classList.remove('locked');
+            }
+            
+            // Update achievements
+            gameState.achievements.forEach(ach => {
+                const el = document.getElementById(ach);
+                if (el) el.classList.add('unlocked');
+            });
+        }
+
+        // Level up
+        function levelUp(newLevel) {
+            gameState.level = newLevel;
+            localStorage.setItem('englishQuestLevel', newLevel);
+            alert(`🎉 ¡FELICIDADES! Has alcanzado el nivel ${newLevel}`);
+        }
+
+        // Check daily streak
+        function checkDailyStreak() {
+            const today = new Date().toDateString();
+            const lastPlayed = gameState.lastPlayed;
+            
+            if (lastPlayed) {
+                const lastDate = new Date(lastPlayed);
+                const diffDays = Math.floor((new Date() - lastDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    // Consecutive day
+                    gameState.streak++;
+                    localStorage.setItem('englishQuestStreak', gameState.streak);
+                } else if (diffDays > 1) {
+                    // Streak broken
+                    gameState.streak = 1;
+                    localStorage.setItem('englishQuestStreak', 1);
+                }
+            }
+            
+            gameState.lastPlayed = today;
+            localStorage.setItem('englishQuestLastPlayed', today);
+        }
+
+        // Update challenge timer
+        function updateChallengeTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('challengeTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Start game
+        function startGame(mode) {
+            gameState.mode = mode;
+            gameState.questions = [...questionBanks[mode]].sort(() => Math.random() - 0.5).slice(0, 10);
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.currentStreak = 0;
+            
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('gameScreen').classList.add('active');
+            
+            showQuestion();
+        }
+
+        // Show question
+        function showQuestion() {
+            const q = gameState.questions[gameState.currentQuestion];
+            document.getElementById('qNumber').textContent = gameState.currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('gameStreak').textContent = `🔥 ${gameState.currentStreak}`;
+            
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(idx);
+                grid.appendChild(btn);
+            });
+            
+            document.getElementById('feedback').classList.remove('show');
+        }
+
+        // Check answer
+        function checkAnswer(selected) {
+            const q = gameState.questions[gameState.currentQuestion];
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+            
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            if (selected === q.correct) {
+                // Correct
+                buttons[selected].classList.add('correct');
+                gameState.score++;
+                gameState.currentStreak++;
+                
+                const xpBase = 10;
+                const streakBonus = Math.min(gameState.currentStreak * 2, 10);
+                const totalXP = xpBase + streakBonus;
+                
+                document.getElementById('feedbackIcon').textContent = '✅';
+                document.getElementById('feedbackText').textContent = '¡Correcto! ' + q.explanation;
+                document.getElementById('feedbackXP').textContent = `+${totalXP} XP`;
+                feedback.className = 'feedback correct show';
+                
+                gameState.xp += totalXP;
+                
+                // Check achievements
+                if (gameState.currentStreak >= 10 && !gameState.achievements.includes('ach3')) {
+                    gameState.achievements.push('ach3');
+                    localStorage.setItem('englishQuestAchievements', JSON.stringify(gameState.achievements));
+                }
+            } else {
+                // Wrong
+                buttons[selected].classList.add('wrong');
+                buttons[q.correct].classList.add('correct');
+                gameState.currentStreak = 0;
+                
+                document.getElementById('feedbackIcon').textContent = '❌';
+                document.getElementById('feedbackText').textContent = `La correcta es: ${q.options[q.correct]}. ${q.explanation}`;
+                document.getElementById('feedbackXP').textContent = '+0 XP';
+                feedback.className = 'feedback wrong show';
+            }
+            
+            localStorage.setItem('englishQuestXP', gameState.xp);
+        }
+
+        // Next question
+        function nextQuestion() {
+            gameState.currentQuestion++;
+            
+            if (gameState.currentQuestion >= gameState.questions.length) {
+                showResults();
+            } else {
+                showQuestion();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+            
+            const percentage = (gameState.score / 10) * 100;
+            document.getElementById('resultScore').textContent = `${gameState.score}/10`;
+            
+            // Messages based on score
+            let title, message, trophy;
+            if (percentage >= 90) {
+                title = '¡PERFECTO! 🌟';
+                message = '¡Eres un maestro del inglés!';
+                trophy = '👑';
+                createConfetti();
+            } else if (percentage >= 70) {
+                title = '¡EXCELENTE! 🏆';
+                message = '¡Muy buen trabajo! Sigue así.';
+                trophy = '🏆';
+            } else if (percentage >= 50) {
+                title = '¡BIEN HECHO! ⭐';
+                message = 'Vas por buen camino, sigue practicando.';
+                trophy = '⭐';
+            } else {
+                title = 'SIGUE INTENTANDO 💪';
+                message = 'La práctica hace al maestro. ¡Inténtalo de nuevo!';
+                trophy = '📚';
+            }
+            
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultTrophy').textContent = trophy;
+            
+            const xpEarned = gameState.score * 10;
+            document.getElementById('xpEarned').textContent = `+${xpEarned} XP`;
+            document.getElementById('streakBonus').textContent = `Racha máxima: ${gameState.currentStreak}`;
+            
+            gameState.lessonsCompleted++;
+            localStorage.setItem('englishQuestLessons', gameState.lessonsCompleted);
+            
+            // Unlock first achievement if not unlocked
+            if (!gameState.achievements.includes('ach1')) {
+                gameState.achievements.push('ach1');
+                localStorage.setItem('englishQuestAchievements', JSON.stringify(gameState.achievements));
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#00f3ff', '#bd00ff', '#ffd700', '#00ff88', '#ff4757'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Back to menu
+        function backToMenu() {
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('mainMenu').style.display = 'block';
+            updateStats();
+        }
+
+        // Daily challenge
+        function startDailyChallenge() {
+            alert('🎯 Desafío aceptado!\n\nCompleta 5 lecciones sin errores para ganar 100 XP bonus.\n\n¡Buena suerte!');
+        }
+    </script>
+</body>
+</html>
