@@ -76,14 +76,21 @@
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
-        }
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 243, 255, 0.5);
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
 
         .subtitle {
             color: var(--text-secondary);
@@ -715,7 +722,7 @@ background-clip: text;
 </head>
 <body>
     <!-- Background Stars -->
-    <div class="stars" id="stars"></div>
+    <div class="logo">🎮 ENGLISH QUEST</div>
 
     <div class="app-container">
         <!-- SVG Gradient Definition -->
@@ -1290,3 +1297,4 @@ background-clip: text;
 </body>
 
 </html>
+
